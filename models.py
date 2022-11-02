@@ -9,9 +9,9 @@ from flask_login import UserMixin
 DATABASE = SqliteDatabase('auctions.sqlite')
 
 class User(UserMixin, Model):
-    username: CharField(unique = True)
-    email: CharField(unique = True)
-    password: CharField()
+    username = CharField(unique = True)
+    email = CharField(unique = True)
+    password = CharField()
     # Model needs to be changed while in development. 
     # Add these fields when feature is implemented.
     # feedback
