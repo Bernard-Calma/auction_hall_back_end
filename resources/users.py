@@ -5,30 +5,37 @@ from flask import Blueprint, jsonify, request
 
 from playhouse.shortcuts import model_to_dict
 
-from flask_bcrypt import generate_password_hash
+from flask_bcrypt import generate_password_hash, check_password_hash
 
 user = Blueprint("users", "user", url_prefix = "/users")
 
 # SHOW USER ROUTE
-@user.route('/<id>', methods = ["GET"])
-def get_user(id):
-    """Get one user by ID"""
-    print("Parameters", id)
+@user.route('/login', methods = ["POST"])
+def get_user():
+    """Login Route"""
+    print(request.get_json())
+    payload = request.get_json()
+    payload['email'] = payload['email'].lower()
     try:
-        user = [model_to_dict(user) for user in models.User.select()]
-        if user:
+        print("Login")
+        user = models.User.get(models.User.email == payload['email'])
+        # print("USER", user)
+        user_dict = model_to_dict(user)
+        if (check_password_hash(user_dict['password'], payload['password'])):
+            del user_dict['password']
             return jsonify(
-            data = user,
+            data = user_dict,
             status = {
                 "code": 200,
-                "message": "Success"
+                "message": "Login Sucessfully"
                 }
             ), 200
         else:
             return jsonify(
+                data = {},
                 status = {
                     "code": 404,
-                    "message": "User not found",
+                    "message": "Username or Password does not match",
                 }
             ), 404
         
@@ -37,7 +44,7 @@ def get_user(id):
             data = {},
             status = {
                 "code": 401,
-                "message" : "Error getting data"
+                "message" : "Username or Password does not match"
             }
         )
         
@@ -69,6 +76,6 @@ def create_user():
             data = user_dict,
             status = {
                 "code": 201,
-                "message": "Account Register Successfully"
+                "message": "Account Registered Successfully"
                 }
             ), 201
