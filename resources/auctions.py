@@ -16,3 +16,27 @@ def auctions_index():
     result = models.Auctions.select()
     print('Auctions: ', result)
 
+# Create Route
+@auctions.route('/', methods = ['POST'])
+def auction_create():
+    """Create an auction"""
+    payload = request.get_json()
+    print("Payload: ", payload)
+    print("Current User: ", current_user)
+    new_auction = models.Auctions.create(
+        user = current_user.id,
+        auction_date = payload['auction_date'],
+        title = payload['title'],
+        description = payload['description'],
+        price = payload['price'],
+        price_increment = payload['price_increment'],
+        # need to make user upload a photo
+        # photo = "No Photo",
+        # need to inintiate a list to hold foreign keys
+        # participants = [],
+    )
+    auction_dict = model_to_dict(new_auction)    
+    # Remove uneccessary properties of current user to be added in auction
+    auction_dict['user'].pop('password')
+    print(auction_dict, "New auction")
+    return auction_dict

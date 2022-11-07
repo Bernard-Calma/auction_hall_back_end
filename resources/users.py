@@ -84,3 +84,13 @@ def create_user():
                 "message": "Account Registered Successfully"
                 }
             ), 201
+
+# Get All Users Route
+@user.route('/', methods = ["GET"])
+def get_all_users():
+    """GET ALL USERS"""
+    for user in models.User.select():
+        print(user.__dict__)
+    return {
+        "message": "yes"
+    }
