@@ -23,9 +23,24 @@ class User(UserMixin, Model):
         database = DATABASE
 
 
+class Auctions(Model):
+    user = ForeignKeyField(User, backref='auctions')
+    created_date = DateTimeField(default = datetime.datetime.now)
+    auction_date = DateTimeField()
+    title = CharField(255)
+    description = CharField(255)
+    price = DoubleField()
+    price_increment = DoubleField()
+    photo = BlobField()
+    participants = ForeignKeyField(User, backref='auctions')
+
+    class Meta:
+        database = DATABASE
+
+
 def initialize():
     DATABASE.connect()
     print("Connected to Database")
-    DATABASE.create_tables([User], safe = True)
+    DATABASE.create_tables([User, Auctions], safe = True)
     print("Create table check")
     DATABASE.close()

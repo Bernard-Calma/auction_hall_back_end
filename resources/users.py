@@ -6,6 +6,7 @@ from flask import Blueprint, jsonify, request
 from playhouse.shortcuts import model_to_dict
 
 from flask_bcrypt import generate_password_hash, check_password_hash
+from flask_login import login_user, current_user, logout_user, login_required
 
 user = Blueprint("users", "user", url_prefix = "/users")
 
@@ -23,6 +24,8 @@ def get_user():
         user_dict = model_to_dict(user)
         if (check_password_hash(user_dict['password'], payload['password'])):
             del user_dict['password']
+            login_user(user)
+            # print("current user", current_user.__dict__)
             return jsonify(
             data = user_dict,
             status = {
@@ -68,8 +71,10 @@ def create_user():
         payload['password'] = generate_password_hash(payload['password'])
         user = models.User.create(**payload)
         # Add login_user on this line
+        login_user(user)
         # return created user
-        user_dict = model_to_dict(user)
+        # print(user)
+        user_dict = model_to_dict(current_user, "current user")
         del user_dict['password']
         print(f"User {user_dict['id']} created.")
         return jsonify(

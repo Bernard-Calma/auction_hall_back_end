@@ -6,6 +6,7 @@ import models
 
 # models
 from resources.users import user
+from resources.auctions import auctions
 
 # login manager
 from flask_login import LoginManager
@@ -42,6 +43,7 @@ def after_request(response):
 
 CORS(user, origins=['https://localhost:3000'], supports_credentials=True)
 app.register_blueprint(user, url_prefix="/api/v1/auctions/users")
+app.register_blueprint(auctions, url_prefix = "/api/v1/auctions")
 
 #default route
 @app.route('/api/v1/auctions')
