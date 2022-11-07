@@ -14,8 +14,17 @@ auctions = Blueprint('auctions', 'auctions')
 def auctions_index():
     """Show all auctions"""
     result = models.Auctions.select()
-    print('Auctions: ', result)
-
+    print('Auctions: ', result) #query
+    all_acutions = [model_to_dict(dog) for dog in result]
+    # remove unecessary user data to be sent back to client
+    for auction in all_acutions:
+        auction['user'].pop('password')
+    print(all_acutions)
+    return jsonify({
+        'data': all_acutions,
+        'message': "Successfully retrieved all auctions",
+        'status' : 200,
+    }), 200
 # Create Route
 @auctions.route('/', methods = ['POST'])
 def auction_create():
