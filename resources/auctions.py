@@ -51,8 +51,10 @@ def auction_create():
     # print(auction_dict, "New auction")
     return jsonify(
         data    = auction_dict,
-        message = "Successfully added a new auction",
-        status  = 200
+        status = {
+            'code'      : 200,
+            'message'   : "Successfully added a new auction",
+        }
     ), 200
 
 #Show Route
@@ -66,8 +68,10 @@ def acution_one(id):
     print("Return ", auction_found)
     return jsonify(
         data = auction_found,
-        message = f"Successfully found Auction with ID: {id}",
-        status = 200
+        status = {
+            'code'      : 200,
+            'message'   : f"Successfully found Auction with ID: {id}",
+        }
     ), 200
 
 # Edit Route
@@ -81,6 +85,8 @@ def auction_edit(id):
     del auction_edited['user']['password']
     return jsonify(
         data = auction_edited,
-        message = f"Successfully updated Auction ID: {id}",
-        status = 200
+        status = {
+            'code'      : 200,
+            'message'   : f"Successfully updated Auction ID: {id}",
+        }
     ), 200
