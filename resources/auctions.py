@@ -20,11 +20,11 @@ def auctions_index():
     for auction in all_acutions:
         auction['user'].pop('password')
     print(all_acutions)
-    return jsonify({
-        'data': all_acutions,
-        'message': "Successfully retrieved all auctions",
-        'status' : 200,
-    }), 200
+    return jsonify(
+        data    = all_acutions,
+        message = "Successfully retrieved all auctions",
+        status  = 200,
+    ), 200
 
 # Create Route
 @auctions.route('/', methods = ['POST'])
@@ -49,8 +49,23 @@ def auction_create():
     # Remove uneccessary properties of current user to be added in auction
     auction_dict['user'].pop('password')
     # print(auction_dict, "New auction")
-    return jsonify({
-        'data': auction_dict,
-        'message': "Successfully added a new auction",
-        'status' : 200
-    }), 200
+    return jsonify(
+        data    = auction_dict,
+        message = "Successfully added a new auction",
+        status  = 200
+    ), 200
+
+#Show Route
+@auctions.route('/<id>', methods = ['GET'])
+def acution_one(id):
+    """Get one Auction"""
+    query = models.Auctions.select().where(models.Auctions.id == id)
+    query.execute()
+    auction_found = model_to_dict(models.Auctions.get_by_id(id))
+    del auction_found['user']['password']
+    print("Return ", auction_found)
+    return jsonify(
+        data = auction_found,
+        message = f"Successfully found Auction with ID:{id}",
+        status = 200
+    ), 200
