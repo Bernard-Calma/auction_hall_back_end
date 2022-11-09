@@ -66,6 +66,21 @@ def acution_one(id):
     print("Return ", auction_found)
     return jsonify(
         data = auction_found,
-        message = f"Successfully found Auction with ID:{id}",
+        message = f"Successfully found Auction with ID: {id}",
+        status = 200
+    ), 200
+
+# Edit Route
+@auctions.route('/<id>', methods = ['PUT'])
+def auction_edit(id):
+    """Edit auction by auction_id"""
+    payload = request.get_json()
+    query = models.Auctions.update(**payload).where(models.Auctions.id == id)
+    query.execute()
+    auction_edited = model_to_dict(models.Auctions.get_by_id(id))
+    del auction_edited['user']['password']
+    return jsonify(
+        data = auction_edited,
+        message = f"Successfully updated Auction ID: {id}",
         status = 200
     ), 200
