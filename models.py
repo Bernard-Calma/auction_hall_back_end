@@ -9,7 +9,7 @@ if 'ON_HEROKU' in os.environ:
     DATABASE = connect(os.environ.get('DATABASE_URL'))
 else:
     DATABASE = SqliteDatabase('auctions.sqlite')
-
+print("DATABASE :",DATABASE)
 class User(UserMixin, Model):
     username = CharField(unique = True)
     email = CharField(unique = True)
