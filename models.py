@@ -5,10 +5,8 @@ from flask_login import UserMixin
 import os
 from playhouse.db_url import connect
 
-if 'ON_HEROKU' in os.environ:
-    DATABASE = connect(os.environ.get('DATABASE_URL'))
-else:
-    DATABASE = SqliteDatabase('auctions.sqlite')
+DATABASE = connect(os.environ.get('DATABASE_URL') or 'sqlite:///dogs.sqlite')
+
 print("DATABASE :",DATABASE)
 print("ENVIRON : ", os.environ)
 class User(UserMixin, Model):
