@@ -1,5 +1,7 @@
-from flask import Flask, g
+from flask import Flask, g, after_this_request
 from flask_cors import CORS
+
+import os
 
 # Database
 import models
@@ -50,6 +52,10 @@ app.register_blueprint(auctions, url_prefix = "/api/v1/auctions")
 def index():
     """Home Route"""
     return "hello world"
+
+if os.environ.get('FLASK_ENV') != 'development':
+  print('\non heroku!')
+  models.initialize()
 
 if __name__ == "__main__":
     models.initialize()
