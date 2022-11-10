@@ -10,6 +10,7 @@ if 'ON_HEROKU' in os.environ:
 else:
     DATABASE = SqliteDatabase('auctions.sqlite')
 print("DATABASE :",DATABASE)
+print("ENVIRON : ", os.environ['ON_HEROKU'])
 class User(UserMixin, Model):
     username = CharField(unique = True)
     email = CharField(unique = True)
