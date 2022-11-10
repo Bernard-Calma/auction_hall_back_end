@@ -90,3 +90,7 @@ def auction_edit(id):
             'message'   : f"Successfully updated Auction ID: {id}",
         }
     ), 200
+
+
+# TO DO
+# ADD ERROR HANDLING WHEN FOR ROUTES WHEN INVALID PARAMS ARE SENT OVER
