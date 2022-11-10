@@ -2,6 +2,7 @@ from flask import Flask, g, after_this_request
 from flask_cors import CORS
 
 import os
+from dotenv import load_dotenv
 
 # Database
 import models
@@ -15,11 +16,11 @@ from flask_login import LoginManager
 
 
 DEBUG = True
-PORT = 8000
+PORT = os.environ.get("PORT")
 
 app = Flask(__name__)
 
-app.secret_key = "aajn23-/fu919"
+app.secret_key = os.environ.get("APP_SECRET")
 login_manager = LoginManager()
 login_manager.init_app(app)
 
