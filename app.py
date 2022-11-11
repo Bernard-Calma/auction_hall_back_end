@@ -60,6 +60,7 @@ if os.environ.get('FLASK_ENV') != 'development':
 
 if __name__ == "__main__":
     models.initialize()
+    print(f"Server is up and running at PORT: {PORT}")
     app.run(debug=DEBUG, port=PORT)
 
     

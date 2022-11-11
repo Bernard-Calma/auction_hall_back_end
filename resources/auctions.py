@@ -96,7 +96,6 @@ def auction_edit(id):
 def auction_delete(id):
     """Delete auction by ID"""
     query = models.Auctions.delete_by_id(id)
-    query.execute()
     return jsonify(
         data = {},
         status = {
