@@ -15,7 +15,7 @@ def auctions_index():
     """Show all auctions"""
     result = models.Auctions.select()
     print('Auctions: ', result) #query
-    all_acutions = [model_to_dict(dog) for dog in result]
+    all_acutions = [model_to_dict(auction) for auction in result]
     # remove unecessary user data to be sent back to client
     for auction in all_acutions:
         auction['user'].pop('password')
@@ -91,6 +91,18 @@ def auction_edit(id):
         }
     ), 200
 
-
+# DELETE ROUTE
+@auctions.route('/<id>', methods = ['DELETE'])
+def auction_delete(id):
+    """Delete auction by ID"""
+    query = models.Auctions.delete_by_id(id)
+    query.execute()
+    return jsonify(
+        data = {},
+        status = {
+            'code'      : 200,
+            'message'   : f"Auction: {id} is sucessfully deleted"
+        }
+    )
 # TO DO
 # ADD ERROR HANDLING WHEN FOR ROUTES WHEN INVALID PARAMS ARE SENT OVER

@@ -5,10 +5,10 @@ from flask_login import UserMixin
 import os
 from playhouse.db_url import connect
 
-DATABASE = connect(os.environ.get('DATABASE_URL') or 'sqlite:///dogs.sqlite')
+DATABASE = connect(os.environ.get('DATABASE_URL') or 'sqlite:///auctions.sqlite')
 
-print("DATABASE :",DATABASE)
-print("ENVIRON : ", os.environ)
+# print("DATABASE :",DATABASE)
+# print("ENVIRON : ", os.environ)
 class User(UserMixin, Model):
     username = CharField(unique = True)
     email = CharField(unique = True)
