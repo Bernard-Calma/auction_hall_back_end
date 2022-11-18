@@ -33,7 +33,7 @@ class Auctions(Model):
     price = DoubleField()
     price_increment = DoubleField()
     # Need to add photo and participant list on this model
-    # photo = BlobField()
+    photo = BlobField()
     # participants = [ForeignKeyField(User, backref='auctions')]
 
     class Meta:

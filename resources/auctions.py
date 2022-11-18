@@ -1,5 +1,6 @@
 import models
 import datetime
+import json
 
 from flask import Blueprint, request, jsonify
 from flask_login import current_user
@@ -33,6 +34,17 @@ def auction_create():
     payload = request.get_json()
     # print("Payload: ", payload)
     # print("Current User: ", current_user)
+
+    # Convert uploaded photo to binary
+    print(payload['photo'], "PHOTO")
+    print(payload['photo'], "PHOTO URI")
+    # photo = model_to_dict(payload['photo'])
+    # print(payload['photo'], "PHOTO MODEL TO DICT")
+    with open((payload['photo']['uri']), "rb") as f:
+        # data is the binary
+        data = f.read()
+        # print(data, " DATA ")
+ 
     new_auction = models.Auctions.create(
         user = current_user.id,
         auction_date = payload['auction_date'],
@@ -41,14 +53,24 @@ def auction_create():
         price = payload['price'],
         price_increment = payload['price_increment'],
         # need to make user upload a photo
-        # photo = "No Photo",
+        photo = data,
         # need to inintiate a list to hold foreign keys
         # participants = [],
     )
     auction_dict = model_to_dict(new_auction)    
+    # with open ("new.png","wb") as f:
+    #     f.write(data)
+  
     # Remove uneccessary properties of current user to be added in auction
     auction_dict['user'].pop('password')
-    # print(auction_dict, "New auction")
+    print(auction_dict['photo'])
+    photo_binary = auction_dict['photo']
+    # convert binary to json
+    binary_json = photo_binary.decode('utf8-', 'ignore').replace("'",'"')
+    print(binary_json, " BINARY JSON ")
+    auction_dict['photo'] = binary_json
+    
+    print(auction_dict, "New auction")
     return jsonify(
         data    = auction_dict,
         status = {
