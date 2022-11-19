@@ -6,11 +6,12 @@ import os
 from playhouse.db_url import connect
 
 if os.environ.get('FLASK_ENV') != 'production':
-    DATABASE = connect(os.environ.get('DATABASE_URL'))
-    print("Connected to Cloud Database")
-else:
     DATABASE = PostgresqlDatabase("auctions", user="postgres", password="admin", host="localhost", port=5432)
     print("Connected to Local Database")
+else:
+    DATABASE = connect(os.environ.get('DATABASE_URL'))
+    print("Connected to Cloud Database")
+    
 
 # print("ENVIRON : ", os.environ)
 class User(UserMixin, Model):
