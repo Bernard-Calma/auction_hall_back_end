@@ -85,6 +85,21 @@ def create_user():
                 }
             ), 201
 
+# Update User Route
+@user.route('/<id>', methods = ["POST"])
+def update_user(id):
+    """Update user information"""
+    payload = request.get_json()
+    # print(payload)
+    query = models.User.update(**payload).where(models.User.id == id)
+    query.execute()
+    user = model_to_dict(models.User.get_by_id(id))
+    del user['password']
+    # print(user)
+    return jsonify(
+        data = user
+    )
+
 # Get All Users Route
 @user.route('/', methods = ["GET"])
 def get_all_users():
