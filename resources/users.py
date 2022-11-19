@@ -95,10 +95,14 @@ def update_user(id):
     query.execute()
     user = model_to_dict(models.User.get_by_id(id))
     del user['password']
-    # print(user)
+    print(f"User {user['id']} edited.")
     return jsonify(
-        data = user
-    )
+        data = user,
+        status = {
+            "code": 200,
+            "message": "Edit Successfull"
+        }
+    ), 201
 
 # Get All Users Route
 @user.route('/', methods = ["GET"])

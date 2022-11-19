@@ -4,6 +4,7 @@ from flask_login import UserMixin
 
 import os
 from playhouse.db_url import connect
+from playhouse.postgres_ext import *
 
 if os.environ.get('FLASK_ENV') != 'production':
     DATABASE = PostgresqlDatabase("auctions", user="postgres", password="admin", host="localhost", port=5432)
@@ -37,9 +38,8 @@ class Auctions(Model):
     description = CharField(255)
     price = DoubleField()
     price_increment = DoubleField()
-    # Need to add photo and participant list on this model
     photo = BlobField()
-    # participants = [ForeignKeyField(User, backref='auctions')]
+    participants = ArrayField()
 
     class Meta:
         database = DATABASE

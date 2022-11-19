@@ -26,11 +26,6 @@ def auctions_index():
         auction.pop('photo')
         photo = photo_bytes.decode('utf-8')
         auction.update({'photo': photo})
-        # auction['photo'] = json.dumps(bytes(auction['photo']))
-        # auction.pop('photo')
-        # print(f"{bytes(auction['photo'])}")
-        # print(type(auction), "Type")
-        # print("PHOTO ", auction['photo'])
 
     # print("ALL AUCTIONS : " , all_acutions)
     return jsonify(
@@ -61,9 +56,9 @@ def auction_create():
         price = payload['price'],
         price_increment = payload['price_increment'],
         # need to make user upload a photo
-        photo = payload['photo']
+        photo = payload['photo'],
         # need to inintiate a list to hold foreign keys
-        # participants = [],
+        participants = [],
     )
     auction_dict = model_to_dict(new_auction)    
     # Remove uneccessary properties of current user to be added in auction
@@ -82,11 +77,12 @@ def auction_create():
 @auctions.route('/<id>', methods = ['GET'])
 def acution_one(id):
     """Get one Auction"""
+    print("Show Route Initiated")
     query = models.Auctions.select().where(models.Auctions.id == id)
     query.execute()
     auction_found = model_to_dict(models.Auctions.get_by_id(id))
     del auction_found['user']['password']
-    print("Return ", auction_found)
+    # print("Return ", auction_found)
     return jsonify(
         data = auction_found,
         status = {
