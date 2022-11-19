@@ -21,6 +21,7 @@ def auctions_index():
     # remove unecessary user data to be sent back to client
     for auction in all_acutions:
         auction['user'].pop('password')
+        print("PHOTO ", auction['photo'])
         photo_bytes = bytes(auction['photo'])
         auction.pop('photo')
         photo = photo_bytes.decode('utf-8')

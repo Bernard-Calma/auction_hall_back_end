@@ -5,10 +5,12 @@ from flask_login import UserMixin
 import os
 from playhouse.db_url import connect
 
-# DATABASE = connect(os.environ.get('DATABASE_URL') or 'localhost://5432')
-DATABASE = PostgresqlDatabase("auctions", user="postgres", password="admin", host="localhost", port=5432)
+if 'ON_HEROKU' in os.environ:
+    DATABASE = connect(os.environ.get('DATABASE_URL'))
+else:
+    DATABASE = PostgresqlDatabase("auctions", user="postgres", password="admin", host="localhost", port=5432)
 
-# print("DATABASE :",DATABASE)
+print("Database Connection :",DATABASE)
 # print("ENVIRON : ", os.environ)
 class User(UserMixin, Model):
     username = CharField(unique = True)
