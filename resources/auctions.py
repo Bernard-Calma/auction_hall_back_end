@@ -10,17 +10,28 @@ from playhouse.shortcuts import model_to_dict
 
 auctions = Blueprint('auctions', 'auctions')
 
+
 # Index Route
 @auctions.route('/', methods = ['GET'])
 def auctions_index():
     """Show all auctions"""
     result = models.Auctions.select()
-    print('Auctions: ', result) #query
+    # print('Auctions: ', result) #query
     all_acutions = [model_to_dict(auction) for auction in result]
     # remove unecessary user data to be sent back to client
     for auction in all_acutions:
         auction['user'].pop('password')
-    print(all_acutions)
+        photo_bytes = bytes(auction['photo'])
+        auction.pop('photo')
+        photo = photo_bytes.decode('utf-8')
+        auction.update({'photo': photo})
+        # auction['photo'] = json.dumps(bytes(auction['photo']))
+        # auction.pop('photo')
+        # print(f"{bytes(auction['photo'])}")
+        # print(type(auction), "Type")
+        # print("PHOTO ", auction['photo'])
+
+    # print("ALL AUCTIONS : " , all_acutions)
     return jsonify(
         data    = all_acutions,
         message = "Successfully retrieved all auctions",
@@ -36,14 +47,10 @@ def auction_create():
     # print("Current User: ", current_user)
 
     # Convert uploaded photo to binary
-    print(payload['photo'], "PHOTO")
-    print(payload['photo'], "PHOTO URI")
+    print("PHOTO", payload['photo'])
+    # print("PHOTO DICT", [json.dumps(payload['photo'])])
+    # print(payload['photo'], "PHOTO URI")
     # photo = model_to_dict(payload['photo'])
-    # print(payload['photo'], "PHOTO MODEL TO DICT")
-    with open((payload['photo']['uri']), "rb") as f:
-        # data is the binary
-        data = f.read()
-        # print(data, " DATA ")
  
     new_auction = models.Auctions.create(
         user = current_user.id,
@@ -53,23 +60,14 @@ def auction_create():
         price = payload['price'],
         price_increment = payload['price_increment'],
         # need to make user upload a photo
-        photo = data,
+        photo = payload['photo']
         # need to inintiate a list to hold foreign keys
         # participants = [],
     )
     auction_dict = model_to_dict(new_auction)    
-    # with open ("new.png","wb") as f:
-    #     f.write(data)
-  
     # Remove uneccessary properties of current user to be added in auction
     auction_dict['user'].pop('password')
     print(auction_dict['photo'])
-    photo_binary = auction_dict['photo']
-    # convert binary to json
-    binary_json = photo_binary.decode('utf8-', 'ignore').replace("'",'"')
-    print(binary_json, " BINARY JSON ")
-    auction_dict['photo'] = binary_json
-    
     print(auction_dict, "New auction")
     return jsonify(
         data    = auction_dict,
