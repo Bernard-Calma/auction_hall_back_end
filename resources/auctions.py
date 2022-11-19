@@ -21,7 +21,9 @@ def auctions_index():
     # remove unecessary user data to be sent back to client
     for auction in all_acutions:
         auction['user'].pop('password')
-        print("PHOTO ", auction['photo'])
+        # print("PHOTO ", auction['photo'])
+        print("Get all auctions initiated")
+        # CHANGE THIS TO NOT BE IN MEMORY
         photo_bytes = bytes(auction['photo'])
         auction.pop('photo')
         photo = photo_bytes.decode('utf-8')
@@ -82,7 +84,6 @@ def acution_one(id):
     query.execute()
     auction_found = model_to_dict(models.Auctions.get_by_id(id))
     del auction_found['user']['password']
-    # print("Return ", auction_found)
     return jsonify(
         data = auction_found,
         status = {
@@ -100,6 +101,10 @@ def auction_edit(id):
     query.execute()
     auction_edited = model_to_dict(models.Auctions.get_by_id(id))
     del auction_edited['user']['password']
+    photo_bytes = bytes(auction_edited['photo'])
+    auction_edited.pop('photo')
+    photo = photo_bytes.decode('utf-8')
+    auction_edited.update({'photo': photo})
     return jsonify(
         data = auction_edited,
         status = {
