@@ -39,7 +39,10 @@ class Auctions(Model):
     price = DoubleField()
     price_increment = DoubleField()
     photo = BlobField()
-    participants = ArrayField()
+    participants = ArrayField(null = True)
+    winner = ForeignKeyField(User, null = True, backref='auctions')
+    logs = CharField(default = "")
+
 
     class Meta:
         database = DATABASE
