@@ -41,7 +41,8 @@ class Auctions(Model):
     photo = BlobField()
     participants = ArrayField(null = True)
     winner = ForeignKeyField(User, null = True, backref='auctions')
-    logs = CharField(default = "")
+    highest_bid = DateTimeField(null = True)
+    logs = CharField(null = True)
 
 
     class Meta:

@@ -21,6 +21,8 @@ def auctions_index():
     # remove unecessary user data to be sent back to client
     for auction in all_acutions:
         auction['user'].pop('password')
+        if auction['winner']:
+            auction['winner'].pop('password')
         # print("PHOTO ", auction['photo'])
         print("Get all auctions initiated")
         # CHANGE THIS TO NOT BE IN MEMORY
@@ -84,6 +86,8 @@ def acution_one(id):
     query.execute()
     auction_found = model_to_dict(models.Auctions.get_by_id(id))
     del auction_found['user']['password']
+    if auction_found['winner']:
+        del auction_found['winner']['password']
     return jsonify(
         data = auction_found,
         status = {
@@ -101,6 +105,8 @@ def auction_edit(id):
     query.execute()
     auction_edited = model_to_dict(models.Auctions.get_by_id(id))
     del auction_edited['user']['password']
+    if auction_edited['winner']:
+        del auction_edited['winner']['password']
     photo_bytes = bytes(auction_edited['photo'])
     auction_edited.pop('photo')
     photo = photo_bytes.decode('utf-8')
@@ -125,5 +131,49 @@ def auction_delete(id):
             'message'   : f"Auction: {id} is sucessfully deleted"
         }
     )
+
+#Start Auction Show Route
+@auctions.route('/start/<id>', methods = ['GET'])
+def acution_start(id):
+    """Get one Auction"""
+    print("Show Route Initiated")
+    query = models.Auctions.select().where(models.Auctions.id == id)
+    query.execute()
+    auction_found = model_to_dict(models.Auctions.get_by_id(id))
+    del auction_found['user']['password']
+    if auction_found['winner']:
+        del auction_found['winner']['password']
+    del auction_found['photo']
+    return jsonify(
+        data = auction_found,
+        status = {
+            'code'      : 200,
+            'message'   : f"Successfully found Auction with ID: {id}",
+        }
+    ), 200
+
+ #Start Auction Edit Route
+@auctions.route('/start/<id>', methods = ['POST'])
+def acution_start_edit(id):
+    """Get one Auction"""
+    print("Edit Route Initiated")
+    payload = request.get_json()
+    print("BODY: ", payload)
+    query = models.Auctions.update(**payload).where(models.Auctions.id == id)
+    query.execute()
+    auction_found = model_to_dict(models.Auctions.get_by_id(id))
+    print(auction_found)
+    del auction_found['user']['password']
+    if auction_found['winner']:
+        del auction_found['winner']['password']
+    del auction_found['photo']
+    print(auction_found)
+    return jsonify(
+        data = auction_found,
+        status = {
+            'code'      : 200,
+            'message'   : f"Successfully found Auction with ID: {id}",
+        }
+    ), 200   
 # TO DO
 # ADD ERROR HANDLING WHEN FOR ROUTES WHEN INVALID PARAMS ARE SENT OVER
