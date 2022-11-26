@@ -42,7 +42,7 @@ class Auctions(Model):
     participants = ArrayField(null = True)
     winner = ForeignKeyField(User, null = True, backref='auctions')
     highest_bid = DateTimeField(null = True)
-    logs = CharField(null = True)
+    logs = TextField(default = "")
 
 
     class Meta:
