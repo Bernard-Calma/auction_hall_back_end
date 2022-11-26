@@ -44,7 +44,7 @@ def after_request(response):
     g.db.close()
     return response
 
-CORS(user, origins=['https://localhost:3000'], supports_credentials=True)
+CORS(user, origins=['https://localhost:8081'], supports_credentials=True)
 app.register_blueprint(user, url_prefix="/api/v1/auctions/users")
 app.register_blueprint(auctions, url_prefix = "/api/v1/auctions")
 
