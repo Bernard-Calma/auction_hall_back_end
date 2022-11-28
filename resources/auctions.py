@@ -26,10 +26,7 @@ def auctions_index():
         # print("PHOTO ", auction['photo'])
         # print("Get all auctions initiated")
         # CHANGE THIS TO NOT BE IN MEMORY
-        # photo_bytes = bytes(auction['photo'])
-        # auction.pop('photo')
-        # photo = photo_bytes.decode('utf-8')
-        # auction.update({'photo': photo})
+        auction.update({'photo': bytes(auction['photo']).decode('utf-8')})
 
     # print("ALL AUCTIONS : " , all_acutions)
     return jsonify(
@@ -67,10 +64,10 @@ def auction_create():
     auction_dict = model_to_dict(new_auction)    
     # Remove uneccessary properties of current user to be added in auction
     auction_dict['user'].pop('password')
-    print(auction_dict['photo'])
-    print(auction_dict, "New auction")
+    # print(auction_dict['photo'])
+    # print(auction_dict, "New auction")
     return jsonify(
-        data    = auction_dict,
+        data   = auction_dict,
         status = {
             'code'      : 200,
             'message'   : "Successfully added a new auction",
@@ -88,10 +85,7 @@ def acution_one(id):
     del auction_found['user']['password']
     if auction_found['winner']:
         del auction_found['winner']['password']
-    photo_bytes = bytes(auction_found['photo'])
-    auction_found.pop('photo')
-    photo = photo_bytes.decode('utf-8')
-    auction_found.update({'photo': photo})   
+    auction_found.update({'photo': bytes(auction_found['photo']).decode('utf-8')})
     return jsonify(
         data = auction_found,
         status = {
@@ -111,10 +105,7 @@ def auction_edit(id):
     del auction_edited['user']['password']
     if auction_edited['winner']:
         del auction_edited['winner']['password']
-    photo_bytes = bytes(auction_edited['photo'])
-    auction_edited.pop('photo')
-    photo = photo_bytes.decode('utf-8')
-    auction_edited.update({'photo': photo})
+    auction_edited.update({'photo': bytes(auction_edited['photo']).decode('utf-8')})
     return jsonify(
         data = auction_edited,
         status = {
@@ -147,10 +138,7 @@ def acution_start(id):
     del auction_found['user']['password']
     if auction_found['winner']:
         del auction_found['winner']['password']
-    photo_bytes = bytes(auction_found['photo'])
-    auction_found.pop('photo')
-    photo = photo_bytes.decode('utf-8')
-    auction_found.update({'photo': photo})
+    auction_found.update({'photo': bytes(auction_found['photo']).decode('utf-8')})
     return jsonify(
         data = auction_found,
         status = {
@@ -173,11 +161,8 @@ def acution_start_edit(id):
     del auction_found['user']['password']
     if auction_found['winner']:
         del auction_found['winner']['password']
-    photo_bytes = bytes(auction_found['photo'])
-    auction_found.pop('photo')
-    photo = photo_bytes.decode('utf-8')
-    auction_found.update({'photo': photo})
-    print(auction_found)
+    auction_found.update({'photo': bytes(auction_found['photo']).decode('utf-8')})
+    # print(auction_found)
     return jsonify(
         data = auction_found,
         status = {
