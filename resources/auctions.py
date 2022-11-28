@@ -24,12 +24,12 @@ def auctions_index():
         if auction['winner']:
             auction['winner'].pop('password')
         # print("PHOTO ", auction['photo'])
-        print("Get all auctions initiated")
+        # print("Get all auctions initiated")
         # CHANGE THIS TO NOT BE IN MEMORY
-        photo_bytes = bytes(auction['photo'])
-        auction.pop('photo')
-        photo = photo_bytes.decode('utf-8')
-        auction.update({'photo': photo})
+        # photo_bytes = bytes(auction['photo'])
+        # auction.pop('photo')
+        # photo = photo_bytes.decode('utf-8')
+        # auction.update({'photo': photo})
 
     # print("ALL AUCTIONS : " , all_acutions)
     return jsonify(
