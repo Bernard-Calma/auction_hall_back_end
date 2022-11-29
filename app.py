@@ -1,5 +1,6 @@
-from flask import Flask, g, after_this_request
+from flask import Flask, g, jsonify
 from flask_cors import CORS
+
 
 import os
 from dotenv import load_dotenv
@@ -19,6 +20,20 @@ DEBUG = True
 PORT = 8000
 
 app = Flask(__name__)
+
+# Error Handler
+@app.errorhandler(Exception)
+def server_error(err):
+    """This function to display errors on routes"""
+    ## This logs error uncomment to enable
+    # app.logger.exception(err) 
+    return jsonify(
+        data = {},
+        status = {
+            "code": 400,
+            "message": f"Error: {err}"
+        }
+    ), 400
 
 app.secret_key = os.environ.get("SECRET_KEY")
 login_manager = LoginManager()

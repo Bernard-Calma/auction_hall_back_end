@@ -1,15 +1,10 @@
 import models
-import datetime
-import json
 
 from flask import Blueprint, request, jsonify
 from flask_login import current_user
-
 from playhouse.shortcuts import model_to_dict
 
-
 auctions = Blueprint('auctions', 'auctions')
-
 
 # Index Route
 @auctions.route('/', methods = ['GET'])
@@ -44,7 +39,7 @@ def auction_create():
     # print("Current User: ", current_user)
 
     # Convert uploaded photo to binary
-    print("PHOTO", payload['photo'])
+    # print("PHOTO", payload['photo'])
     # print("PHOTO DICT", [json.dumps(payload['photo'])])
     # print(payload['photo'], "PHOTO URI")
     # photo = model_to_dict(payload['photo'])
