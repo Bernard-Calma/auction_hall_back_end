@@ -113,3 +113,17 @@ def get_all_users():
     return {
         "message": "yes"
     }
+
+# Logout Route
+@user.route('/logout')
+@login_required
+def logout():
+    """This will logout user from server"""
+    logout_user()
+    return jsonify(
+        data = {},
+        status = {
+            "code": 200,
+            "message": "User Logged Out Successfully"
+        }
+    )
